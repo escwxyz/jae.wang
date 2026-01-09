@@ -1,0 +1,112 @@
+{
+  "$schema": "https://beta.frontmatter.codes/frontmatter.schema.json",
+  "frontMatter.taxonomy.contentTypes": [
+    {
+      "name": "posts",
+      "pageBundle": false,
+      "previewPath": null,
+      "fields": [
+        {
+          "title": "Title",
+          "name": "title",
+          "type": "string",
+          "single": true,
+          "required": true
+        },
+        {
+          "title": "Slug",
+          "name": "slug",
+          "type": "slug",
+          "editable": true,
+          "default": "{{slug}}",
+          "required": true
+        },
+        {
+          "title": "Language",
+          "name": "language",
+          "type": "choice",
+          "choices": ["en", "zh-cn", "de"],
+          "default": "en"
+        },
+        {
+          "title": "Excerpt",
+          "name": "excerpt",
+          "type": "string",
+          "required": true
+        },
+        {
+          "title": "Description",
+          "name": "description",
+          "type": "string",
+          "required": true
+        },
+        {
+          "title": "Publishing date",
+          "name": "date",
+          "type": "datetime",
+          "isPublishDate": true,
+          "required": true,
+          "default": "{{now}}"
+        },
+        {
+          "title": "Last modified date",
+          "name": "lastmod",
+          "type": "datetime",
+          "isModifiedDate": true,
+          "required": true,
+          "default": "{{now}}"
+        },
+        {
+          "title": "Published",
+          "name": "isPublished",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "title": "Unlisted",
+          "name": "isUnlisted",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "title": "Tags",
+          "name": "tags",
+          "type": "tags",
+          "required": true
+        },
+        {
+          "title": "Cover image URL",
+          "name": "coverImageUrl",
+          "type": "string",
+          "required": true,
+          "single": true
+        },
+        {
+          "title": "Featured",
+          "name": "isFeatured",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "title": "Featured order",
+          "name": "featuredOrder",
+          "type": "number",
+          "numberOptions": {
+            "min": 0,
+            "step": 1
+          }
+        }
+      ]
+    }
+  ],
+  "frontMatter.framework.id": "next",
+  "frontMatter.content.publicFolder": "public",
+  "frontMatter.preview.host": "http://localhost:3000",
+  "frontMatter.content.pageFolders": [
+    {
+      "title": "posts",
+      "path": "[[workspace]]/content/posts"
+    }
+  ],
+  "frontMatter.git.enabled": true
+}

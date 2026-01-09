@@ -1,0 +1,86 @@
+.bn-container {
+  --bn-colors-editor-text: var(--color-foreground);
+  --bn-colors-editor-background: var(--color-background);
+  --bn-colors-menu-text: var(--color-foreground);
+  --bn-colors-menu-background: var(--color-popover);
+  --bn-colors-tooltip-text: var(--color-foreground);
+  --bn-colors-tooltip-background: var(--color-muted);
+  --bn-colors-hovered-text: var(--color-foreground);
+  --bn-colors-hovered-background: var(--color-muted);
+  --bn-colors-selected-text: var(--color-primary-foreground);
+  --bn-colors-selected-background: var(--color-primary);
+  --bn-colors-disabled-text: var(--color-muted-foreground);
+  --bn-colors-disabled-background: var(--color-muted);
+
+  --bn-colors-shadow: var(--color-border);
+  --bn-colors-border: var(--color-border);
+  --bn-colors-side-menu: var(--color-muted-foreground);
+
+  --bn-colors-highlights-gray-text: #9b9a97;
+  --bn-colors-highlights-gray-background: #ebeced;
+  --bn-colors-highlights-brown-text: #64473a;
+  --bn-colors-highlights-brown-background: #e9e5e3;
+  --bn-colors-highlights-red-text: #e03e3e;
+  --bn-colors-highlights-red-background: #fbe4e4;
+  --bn-colors-highlights-orange-text: #d9730d;
+  --bn-colors-highlights-orange-background: #f6e9d9;
+  --bn-colors-highlights-yellow-text: #dfab01;
+  --bn-colors-highlights-yellow-background: #fbf3db;
+  --bn-colors-highlights-green-text: #4d6461;
+  --bn-colors-highlights-green-background: #ddedea;
+  --bn-colors-highlights-blue-text: #0b6e99;
+  --bn-colors-highlights-blue-background: #ddebf1;
+  --bn-colors-highlights-purple-text: #6940a5;
+  --bn-colors-highlights-purple-background: #eae4f2;
+  --bn-colors-highlights-pink-text: #ad1a72;
+  --bn-colors-highlights-pink-background: #f4dfeb;
+
+  --bn-font-family: var(--font-sans);
+  --bn-border-radius: var(--radius);
+
+  /* Derived values */
+  --bn-shadow-medium: 0 4px 12px var(--bn-colors-shadow);
+  --bn-shadow-light: 0 2px 6px var(--bn-colors-border);
+  --bn-border: 1px solid var(--bn-colors-border);
+  --bn-border-radius-small: max(var(--bn-border-radius) - 2px, 1px);
+  --bn-border-radius-medium: var(--bn-border-radius);
+  --bn-border-radius-large: max(var(--bn-border-radius) + 2px, 1px);
+}
+
+.bn-container[data-color-scheme="dark"] {
+  --bn-colors-editor-text: var(--color-foreground);
+  --bn-colors-editor-background: var(--color-background);
+  --bn-colors-menu-text: var(--color-foreground);
+  --bn-colors-menu-background: var(--color-popover);
+  --bn-colors-tooltip-text: var(--color-foreground);
+  --bn-colors-tooltip-background: var(--color-muted);
+  --bn-colors-hovered-text: var(--color-foreground);
+  --bn-colors-hovered-background: var(--color-muted);
+  --bn-colors-selected-text: var(--color-primary-foreground);
+  --bn-colors-selected-background: var(--color-primary);
+  --bn-colors-disabled-text: var(--color-muted-foreground);
+  --bn-colors-disabled-background: var(--color-muted);
+
+  --bn-colors-shadow: var(--color-border);
+  --bn-colors-border: var(--color-border);
+  --bn-colors-side-menu: var(--color-muted-foreground);
+
+  --bn-colors-highlights-gray-text: #bebdb8;
+  --bn-colors-highlights-gray-background: #9b9a97;
+  --bn-colors-highlights-brown-text: #8e6552;
+  --bn-colors-highlights-brown-background: #64473a;
+  --bn-colors-highlights-red-text: #ec4040;
+  --bn-colors-highlights-red-background: #be3434;
+  --bn-colors-highlights-orange-text: #e3790d;
+  --bn-colors-highlights-orange-background: #b7600a;
+  --bn-colors-highlights-yellow-text: #dfab01;
+  --bn-colors-highlights-yellow-background: #b58b00;
+  --bn-colors-highlights-green-text: #6b8b87;
+  --bn-colors-highlights-green-background: #4d6461;
+  --bn-colors-highlights-blue-text: #0e87bc;
+  --bn-colors-highlights-blue-background: #0b6e99;
+  --bn-colors-highlights-purple-text: #8552d7;
+  --bn-colors-highlights-purple-background: #6940a5;
+  --bn-colors-highlights-pink-text: #da208f;
+  --bn-colors-highlights-pink-background: #ad1a72;
+}
