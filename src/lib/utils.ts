@@ -1,6 +1,12 @@
 /** biome-ignore-all lint/performance/useTopLevelRegex: <ignore> */
+
+import { existsSync, mkdirSync, readdirSync, readFileSync } from "node:fs";
+import path from "node:path";
 import { type ClassValue, clsx } from "clsx";
+import matter from "gray-matter";
+import { JSDOM } from "jsdom";
 import { twMerge } from "tailwind-merge";
+import type { z } from "zod/v4";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -28,40 +34,68 @@ export const buildPageTitle = (pageTitle: string, siteName?: string) =>
 
 export const isBrowser = typeof window !== "undefined";
 
-// interface ShaderControl {
-//   type: string;
-//   name: string;
-//   controls: ReturnType<typeof useControls>;
-// }
+export const getMarkdownFilesFromPath = (pathname: string): string[] => {
+  if (!existsSync(pathname)) {
+    console.log(`Creating content directory: ${pathname}`);
+    mkdirSync(pathname, { recursive: true });
+    return [];
+  }
 
-// export function extractLevaControls(
-//   vert: string,
-//   frag: string
-// ): Record<string, unknown> {
-//   const controls: ShaderControl[] = `
-//     ${vert}
-//     ${frag}
-//   `
-//     .split("\n")
-//     .filter((x) => x.indexOf("uniform") > -1)
-//     .map((x) => x.match(/uniform (.+?) (.+?);.+(\/\/.+)/m))
-//     .filter((x) => x)
-//     .map((match) => {
-//       if (!(match?.[1] && match[2] && match[3])) {
-//         throw new Error("makeControls: regex match failed");
-//       }
+  const files = readdirSync(pathname);
+  return files
+    .filter((file) => file.endsWith(".md"))
+    .map((file) => path.join(pathname, file));
+};
 
-//       return {
-//         type: match[1],
-//         name: match[2],
-//         controls: JSON.parse(match[3].replace("// ", "")) as ReturnType<
-//           typeof useControls
-//         >,
-//       };
-//     });
+export const parseMarkdownFile = <
+  T extends { fmContentType: "posts" | "projects" },
+>(
+  filePath: string,
+  frontmatterSchema: z.ZodType<T>
+) => {
+  try {
+    const fileContent = readFileSync(filePath, "utf-8");
+    const { data, content } = matter(fileContent);
 
-//   return controls.reduce<Record<string, unknown>>((acc, control) => {
-//     acc[control.name] = control.controls;
-//     return acc;
-//   }, {});
-// }
+    const frontmatter = data;
+
+    const parseResult = frontmatterSchema.safeParse(frontmatter);
+
+    if (parseResult.error) {
+      console.warn(`Skipping ${filePath}: ${parseResult.error.message}`);
+      return;
+    }
+
+    const { fmContentType, ...rest } = parseResult.data;
+
+    return {
+      ...rest,
+      content: content.trim(), // this has to be content
+    };
+  } catch (e) {
+    console.error(`Error parsing ${filePath}:`, e);
+    return;
+  }
+};
+
+export function ensureDom() {
+  if (globalThis.document) {
+    return;
+  }
+
+  const { window } = new JSDOM("<!doctype html><html><body></body></html>");
+  const globalForDom = globalThis as typeof globalThis & {
+    window: Window;
+    document: Document;
+    Node: typeof Node;
+    Element: typeof Element;
+    HTMLElement: typeof HTMLElement;
+    Document: typeof Document;
+  };
+
+  globalForDom.document = window.document;
+  globalForDom.Node = window.Node;
+  globalForDom.Element = window.Element;
+  globalForDom.HTMLElement = window.HTMLElement;
+  globalForDom.Document = window.Document;
+}

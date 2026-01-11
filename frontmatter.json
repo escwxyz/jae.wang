@@ -97,6 +97,80 @@
           }
         }
       ]
+    },
+    {
+      "name": "projects",
+      "pageBundle": false,
+      "previewPath": null,
+      "fields": [
+        {
+          "title": "Title",
+          "name": "title",
+          "type": "string",
+          "single": true,
+          "required": true
+        },
+        {
+          "title": "Slug",
+          "name": "slug",
+          "type": "slug",
+          "editable": true,
+          "default": "{{slug}}",
+          "required": true
+        },
+        {
+          "title": "Images",
+          "name": "images",
+          "type": "list",
+          "required": true
+        },
+        {
+          "title": "GitHub",
+          "name": "githubUrl",
+          "type": "string",
+          "single": true
+        },
+        {
+          "title": "Live Url",
+          "name": "liveUrl",
+          "type": "string",
+          "single": true
+        },
+        {
+          "title": "Featured",
+          "name": "featured",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "title": "Featured order",
+          "name": "order",
+          "type": "number",
+          "numberOptions": {
+            "min": 0,
+            "step": 1
+          }
+        },
+        {
+          "title": "Published",
+          "name": "published",
+          "type": "boolean",
+          "required": true,
+          "default": true
+        },
+        {
+          "title": "Year",
+          "name": "year",
+          "type": "number"
+        },
+        {
+          "title": "Status",
+          "name": "status",
+          "type": "choice",
+          "choices": ["finished", "pending"],
+          "default": "finished"
+        }
+      ]
     }
   ],
   "frontMatter.framework.id": "next",
@@ -106,6 +180,10 @@
     {
       "title": "posts",
       "path": "[[workspace]]/content/posts"
+    },
+    {
+      "title": "projects",
+      "path": "[[workspace]]/content/projects"
     }
   ],
   "frontMatter.git.enabled": true

@@ -1,4 +1,6 @@
+import { SessionIdArg } from "convex-helpers/server/sessions";
 import { z } from "zod/v4";
+import { internalQuery } from "./_generated/server";
 import { zMutationWithSession } from "./functions";
 import { metadataFields } from "./schema";
 
@@ -23,5 +25,15 @@ export const updateVisitor = zMutationWithSession({
       ...args,
       lastSeen: now,
     });
+  },
+});
+
+export const getVisitor = internalQuery({
+  args: SessionIdArg,
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("visitor")
+      .withIndex("by_sessionId", (q) => q.eq("sessionId", args.sessionId))
+      .unique();
   },
 });

@@ -1,18 +1,10 @@
+import { asyncMap } from "convex-helpers";
 import { zid } from "convex-helpers/server/zod4";
 import { z } from "zod/v4";
-// import { aggregateCommentsByPost } from "./aggregates";
 import { createAuthMutation, zQuery } from "./functions";
 import { commentField } from "./schema";
 
-// export const getCountByPost = zQuery({
-//   args: {
-//     postId: zid("post"),
-//   },
-//   handler: async (ctx, args) => {
-//     return await aggregateCommentsByPost.count(ctx, { namespace: args.postId });
-//   },
-// });
-
+// list all comments for a post
 export const listByPost = zQuery({
   args: {
     postId: zid("post"),
@@ -24,26 +16,24 @@ export const listByPost = zQuery({
       .order("asc")
       .collect();
 
-    return Promise.all(
-      comments.map(async (comment) => {
-        const author = await ctx.db
-          .query("user")
-          .withIndex("by_id", (q) => q.eq("_id", comment.authorId))
-          .unique();
+    return asyncMap(comments, async (comment) => {
+      const author = await ctx.db
+        .query("user")
+        .withIndex("by_id", (q) => q.eq("_id", comment.authorId))
+        .unique();
 
-        if (!author) {
-          throw new Error("A comment without author");
-        }
-
-        return {
-          ...comment,
-          author: {
-            name: author.name,
-            avatarUrl: author.avatarUrl,
-          },
-        };
-      })
-    );
+      if (!author) {
+        throw new Error("A comment without author");
+      }
+      return {
+        ...comment,
+        author: {
+          name: author.name,
+          avatarUrl: author.avatarUrl,
+          website: author.website,
+        },
+      };
+    });
   },
 });
 

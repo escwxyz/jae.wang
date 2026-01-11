@@ -7,6 +7,38 @@ import { tables as authTables } from "./authSchema";
 
 export const slugRegEx = /^(\w+)((-\w+)+)?$/;
 
+export const siteConfigFields = {
+  siteName: z.string(),
+  // siteLogoKey: z.optional(z.string()),
+  // siteLogoUrl: z.url(),
+  siteTagline: z.optional(z.string().max(10)),
+  siteDescription: z.string().min(120).max(160),
+  contactEmail: z.email(),
+  siteAuthor: z.string(),
+  siteAuthorUrl: z.url(),
+  siteOgImageUrl: z.url(),
+};
+
+export const projectFields = {
+  title: z.string().max(30),
+  slug: z.string().regex(slugRegEx),
+  content: z.string().min(100),
+  techstack: z.array(
+    z
+      .string()
+      .refine((tag) => tag === tag.toLowerCase(), "Tags must be lowercase")
+  ),
+  images: z.array(z.url()),
+  githubUrl: z.optional(z.url()),
+  liveUrl: z.optional(z.url()),
+  featured: z.boolean().default(false),
+  order: z.number().int().min(0),
+  published: z.boolean().default(true),
+  year: z.optional(z.number().int().min(2022)),
+  status: z.enum(["finished", "pending"]).default("finished"),
+  lastSyncedAt: z.number(),
+};
+
 export const metadataFields = {
   currentPath: z.string(),
   ip: z.string().optional(),
@@ -51,7 +83,7 @@ export const postFields = {
   coverImageUrl: z.url(),
   isFeatured: z.boolean().default(false),
   featuredOrder: z.optional(z.number().min(0)), // Order in featured section (lower = first)
-  lastSyncedAt: z.iso.datetime(),
+  lastSyncedAt: z.number(),
 };
 
 export const commentField = {
@@ -107,23 +139,13 @@ export default defineSchema({
   }).index("by_slug", ["slug"]),
 
   project: defineTable({
-    slug: v.string(),
-    title: v.string(),
-    description: v.string(),
-    content: v.optional(v.string()),
-    techStack: v.array(v.string()),
-    imageUrl: v.string(),
-    githubUrl: v.optional(v.string()),
-    liveUrl: v.optional(v.string()),
-    featured: v.boolean(),
-    order: v.number(),
-    published: v.boolean(),
-    year: v.optional(v.number()),
+    ...zodToConvexFields(projectFields),
   })
     .index("by_slug", ["slug"])
     .index("by_published", ["published"])
     .index("by_featured_order", ["featured", "order"])
-    .index("by_year", ["year"]),
+    .index("by_year", ["year"])
+    .index("by_status", ["status"]),
 
   // Newsletter subscribers table
   // Stores email subscriptions with unsubscribe tokens
@@ -149,5 +171,10 @@ export default defineSchema({
 
   contact: defineTable({
     ...zodToConvexFields(contactFormFields),
+    ...zodToConvexFields(metadataFields),
+  }),
+
+  siteConfig: defineTable({
+    ...zodToConvexFields(siteConfigFields),
   }),
 });

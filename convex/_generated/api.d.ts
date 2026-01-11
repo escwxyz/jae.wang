@@ -14,16 +14,22 @@ import type * as auth from "../auth.js";
 import type * as authHelpers from "../authHelpers.js";
 import type * as authSchema from "../authSchema.js";
 import type * as comment from "../comment.js";
+import type * as contact from "../contact.js";
+import type * as email from "../email.js";
 import type * as functions from "../functions.js";
 import type * as helpers_getEnv from "../helpers/getEnv.js";
+import type * as helpers_rateLimiter from "../helpers/rateLimiter.js";
 import type * as helpers_roleGuard from "../helpers/roleGuard.js";
 import type * as http from "../http.js";
 import type * as post from "../post.js";
 import type * as project from "../project.js";
 import type * as r2 from "../r2.js";
+import type * as resend from "../resend.js";
+import type * as siteConfig from "../siteConfig.js";
 import type * as triggers from "../triggers.js";
 import type * as user from "../user.js";
 import type * as visitor from "../visitor.js";
+import type * as workpools from "../workpools.js";
 
 import type {
   ApiFromModules,
@@ -38,16 +44,22 @@ declare const fullApi: ApiFromModules<{
   authHelpers: typeof authHelpers;
   authSchema: typeof authSchema;
   comment: typeof comment;
+  contact: typeof contact;
+  email: typeof email;
   functions: typeof functions;
   "helpers/getEnv": typeof helpers_getEnv;
+  "helpers/rateLimiter": typeof helpers_rateLimiter;
   "helpers/roleGuard": typeof helpers_roleGuard;
   http: typeof http;
   post: typeof post;
   project: typeof project;
   r2: typeof r2;
+  resend: typeof resend;
+  siteConfig: typeof siteConfig;
   triggers: typeof triggers;
   user: typeof user;
   visitor: typeof visitor;
+  workpools: typeof workpools;
 }>;
 
 /**
@@ -481,6 +493,93 @@ export declare const components: {
           size?: number;
         },
         { isNew: boolean }
+      >;
+    };
+  };
+  emailWorkpool: {
+    lib: {
+      cancel: FunctionReference<
+        "mutation",
+        "internal",
+        {
+          id: string;
+          logLevel: "DEBUG" | "TRACE" | "INFO" | "REPORT" | "WARN" | "ERROR";
+        },
+        any
+      >;
+      cancelAll: FunctionReference<
+        "mutation",
+        "internal",
+        {
+          before?: number;
+          limit?: number;
+          logLevel: "DEBUG" | "TRACE" | "INFO" | "REPORT" | "WARN" | "ERROR";
+        },
+        any
+      >;
+      enqueue: FunctionReference<
+        "mutation",
+        "internal",
+        {
+          config: {
+            logLevel: "DEBUG" | "TRACE" | "INFO" | "REPORT" | "WARN" | "ERROR";
+            maxParallelism: number;
+          };
+          fnArgs: any;
+          fnHandle: string;
+          fnName: string;
+          fnType: "action" | "mutation" | "query";
+          onComplete?: { context?: any; fnHandle: string };
+          retryBehavior?: {
+            base: number;
+            initialBackoffMs: number;
+            maxAttempts: number;
+          };
+          runAt: number;
+        },
+        string
+      >;
+      enqueueBatch: FunctionReference<
+        "mutation",
+        "internal",
+        {
+          config: {
+            logLevel: "DEBUG" | "TRACE" | "INFO" | "REPORT" | "WARN" | "ERROR";
+            maxParallelism: number;
+          };
+          items: Array<{
+            fnArgs: any;
+            fnHandle: string;
+            fnName: string;
+            fnType: "action" | "mutation" | "query";
+            onComplete?: { context?: any; fnHandle: string };
+            retryBehavior?: {
+              base: number;
+              initialBackoffMs: number;
+              maxAttempts: number;
+            };
+            runAt: number;
+          }>;
+        },
+        Array<string>
+      >;
+      status: FunctionReference<
+        "query",
+        "internal",
+        { id: string },
+        | { previousAttempts: number; state: "pending" }
+        | { previousAttempts: number; state: "running" }
+        | { state: "finished" }
+      >;
+      statusBatch: FunctionReference<
+        "query",
+        "internal",
+        { ids: Array<string> },
+        Array<
+          | { previousAttempts: number; state: "pending" }
+          | { previousAttempts: number; state: "running" }
+          | { state: "finished" }
+        >
       >;
     };
   };

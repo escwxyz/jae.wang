@@ -2,7 +2,7 @@ import path from "node:path";
 import { BlockNoteEditor } from "@blocknote/core";
 import { api } from "@convex/api";
 import { ConvexHttpClient } from "convex/browser";
-import { postFields } from "convex/schema";
+import { projectFields } from "convex/schema";
 import dotenv from "dotenv";
 
 import { z } from "zod/v4";
@@ -12,31 +12,20 @@ import {
   parseMarkdownFile,
 } from "@/lib/utils";
 
-const dateTimeField = z.preprocess((value) => {
-  if (value instanceof Date) {
-    return value.toISOString();
-  }
-
-  return value;
-}, z.iso.datetime());
-
 const schema = z
-  .object(postFields)
+  .object(projectFields)
   .omit({
     content: true,
-    coverImageKey: true,
     lastSyncedAt: true,
   })
   .extend({
-    date: dateTimeField,
-    lastmod: dateTimeField,
-    fmContentType: z.literal("posts"),
+    fmContentType: z.literal("projects"),
   });
 
-type PostFrontMatter = z.infer<typeof schema>;
+type ProjectFrontMatter = z.infer<typeof schema>;
 
-type ParsedPost = NonNullable<
-  ReturnType<typeof parseMarkdownFile<PostFrontMatter>>
+type ParsedProject = NonNullable<
+  ReturnType<typeof parseMarkdownFile<ProjectFrontMatter>>
 >;
 
 const isProduction = process.env.SYNC_ENV === "production";
@@ -51,12 +40,12 @@ if (isProduction) {
 }
 dotenv.config();
 
-const CONTENT_DIR = path.join(process.cwd(), "content", "posts");
+const CONTENT_DIR = path.join(process.cwd(), "content", "projects");
 
 // const _RAW_OUTPUT_DIR = path.join(process.cwd(), "public", "raw");
 
 // Main sync function
-async function syncPosts() {
+async function syncProjects() {
   console.log("Starting post sync...\n");
 
   // Get Convex URL from environment
@@ -86,23 +75,25 @@ async function syncPosts() {
   }
 
   // Parse all markdown files
-  const posts: ParsedPost[] = [];
+  const projects: ParsedProject[] = [];
   for (const filePath of markdownFiles) {
-    const post = parseMarkdownFile<PostFrontMatter>(filePath, schema);
-    if (post) {
-      const { content, ...rest } = post;
-      const postContent = editor.tryParseMarkdownToBlocks(content);
+    const project = parseMarkdownFile<ProjectFrontMatter>(filePath, schema);
+    if (project) {
+      const { content, ...rest } = project;
+      const projectContent = editor.tryParseMarkdownToBlocks(content);
 
-      posts.push({ ...rest, content: JSON.stringify(postContent) });
-      console.log(`Parsed: ${post.title} (${post.slug})`);
+      projects.push({ ...rest, content: JSON.stringify(projectContent) });
+      console.log(`Parsed: ${project.title} (${project.slug})`);
     }
   }
 
-  console.log(`\nSyncing ${posts.length} posts to Convex...\n`);
+  console.log(`\nSyncing ${projects.length} posts to Convex...\n`);
 
   // Sync posts to Convex
   try {
-    const result = await client.mutation(api.post.syncPosts, { posts });
+    const result = await client.mutation(api.project.syncProjects, {
+      projects,
+    });
     console.log("Sync complete!");
     console.log(`  Created: ${result.created}`);
     console.log(`  Updated: ${result.updated}`);
@@ -118,4 +109,4 @@ async function syncPosts() {
   //   generateRawMarkdownFiles(posts, pages);
 }
 
-syncPosts().catch(console.error);
+syncProjects().catch(console.error);

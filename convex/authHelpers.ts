@@ -4,7 +4,14 @@ import type { MutationCtx, QueryCtx } from "./_generated/server";
 
 export type SessionUser = Pick<
   Doc<"user">,
-  "_id" | "name" | "avatarUrl" | "website" | "createdAt"
+  | "_id"
+  | "name"
+  | "avatarUrl"
+  | "website"
+  | "createdAt"
+  | "email"
+  | "github"
+  | "twitter"
 > & {
   isAdmin: boolean;
   session: Doc<"session">;

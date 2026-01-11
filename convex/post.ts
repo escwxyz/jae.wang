@@ -193,7 +193,7 @@ export const syncPosts = zMutation({
     let updated = 0;
     let deleted = 0;
 
-    const now = new Date().toISOString();
+    const now = Date.now();
     const incomingSlugs = new Set(args.posts.map((p) => p.slug));
 
     const existingPosts = await ctx.db.query("post").collect();

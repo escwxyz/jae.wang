@@ -80,10 +80,27 @@ export const createAuthOptions = (ctx: GenericCtx) =>
       github: {
         clientId: process.env.GITHUB_CLIENT_ID as string,
         clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+        mapProfileToUser: async (profile) => {
+          return {
+            email: profile.email,
+            image: profile.avatar_url,
+            name: profile.name || profile.login,
+
+            github: profile.login,
+            twitter: profile.twitter_username,
+          };
+        },
       },
       google: {
         clientId: process.env.GOOGLE_CLIENT_ID as string,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+        mapProfileToUser: async (profile) => {
+          return {
+            email: profile.email,
+            image: profile.picture,
+            name: profile.name,
+          };
+        },
       },
     },
     databaseHooks: {
@@ -143,6 +160,14 @@ export const createAuthOptions = (ctx: GenericCtx) =>
       },
       additionalFields: {
         website: {
+          type: "string",
+          required: false,
+        },
+        github: {
+          type: "string",
+          required: false,
+        },
+        twitter: {
           type: "string",
           required: false,
         },

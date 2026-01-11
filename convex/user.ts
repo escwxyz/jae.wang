@@ -5,15 +5,12 @@ export const getCurrentUser = createAuthQuery({})({
   handler: (ctx) => {
     const { user } = ctx;
 
+    const { session, ...rest } = user;
+
     return {
-      id: user._id,
-      isAdmin: user.isAdmin,
-      name: user.name,
-      avatarUrl: user.avatarUrl,
-      website: user.website,
-      createdAt: user.createdAt,
-      country: user.session.country,
-      city: user.session.city,
+      ...rest,
+      country: session.country,
+      city: session.city,
     };
   },
 });

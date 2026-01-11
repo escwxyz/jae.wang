@@ -1,6 +1,7 @@
 import type React from "react";
 
 export const SITE_NAME = "Jie Wang";
+export const CONTACT_EMAIL = "hi@jae.wang";
 
 export const PLAYGROUND_CATEGORIES = ["photography", "vibe-coding"] as const;
 

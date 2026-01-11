@@ -1,11 +1,7 @@
 import { Triggers } from "convex-helpers/server/triggers";
 
 import type { DataModel } from "./_generated/dataModel";
-import {
-  aggregateCommentsByPost,
-  aggregatePosts,
-  aggregateUsers,
-} from "./aggregates";
+import { aggregatePosts, aggregateUsers } from "./aggregates";
 
 export const registerTriggers = () => {
   const triggers = new Triggers<DataModel>();
@@ -18,7 +14,7 @@ export const registerTriggers = () => {
 
   triggers.register("user", aggregateUsers.trigger());
   triggers.register("post", aggregatePosts.trigger());
-  triggers.register("comment", aggregateCommentsByPost.trigger());
+  // triggers.register("comment", aggregateCommentsByPost.trigger());
 
   return triggers;
 };
