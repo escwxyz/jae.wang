@@ -4,13 +4,14 @@ import { api } from "@convex/api";
 import { ConvexHttpClient } from "convex/browser";
 import { projectFields } from "convex/schema";
 import dotenv from "dotenv";
-
 import { z } from "zod/v4";
 import {
   ensureDom,
   getMarkdownFilesFromPath,
   parseMarkdownFile,
-} from "@/lib/utils";
+} from "./shared";
+
+ensureDom();
 
 const schema = z
   .object(projectFields)
