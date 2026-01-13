@@ -52,6 +52,9 @@ export const BlackHole = () => {
   const controls = useControls({
     "Black Hole": folder(
       {
+        enabled: {
+          value: true,
+        },
         View: folder(
           {
             far: {
@@ -574,6 +577,10 @@ export const BlackHole = () => {
   ]);
 
   useFrame((state) => {
+    if (!controls.enabled) {
+      return;
+    }
+
     drawBufferSize.set(width, height);
     sharedUniforms.iResolution.value.set(drawBufferSize.x, drawBufferSize.y, 1);
     sharedUniforms.iTime.value = state.clock.elapsedTime * controls.timeScale;
@@ -624,6 +631,10 @@ export const BlackHole = () => {
 
     gl.setScissorTest(false);
   }, -1);
+
+  if (!controls.enabled) {
+    return null;
+  }
 
   return (
     <>
