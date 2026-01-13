@@ -67,18 +67,18 @@ export const BlackHole = () => {
               step: 0.25,
             },
 
-    viewOffsetX: {
-      value: -0.35,
-      min: -0.8,
-      max: 0.8,
-      step: 0.01,
-    },
-    viewOffsetY: {
-      value: 0.35,
-      min: -0.8,
-      max: 0.8,
-      step: 0.01,
-    },
+            viewOffsetX: {
+              value: 0.3,
+              min: -0.8,
+              max: 0.8,
+              step: 0.01,
+            },
+            viewOffsetY: {
+              value: -0.3,
+              min: -0.8,
+              max: 0.8,
+              step: 0.01,
+            },
           },
           {
             collapsed: true,
@@ -113,18 +113,18 @@ export const BlackHole = () => {
 
         Temporal: folder(
           {
-    timeScale: {
-      value: 2.1,
-      min: 0.0,
-      max: 4.0,
-      step: 0.05,
-    },
-    starTimeScale: {
-      value: 1.0,
-      min: 0.0,
-      max: 4.0,
-      step: 0.05,
-    },
+            timeScale: {
+              value: 2.1,
+              min: 0.0,
+              max: 4.0,
+              step: 0.05,
+            },
+            starTimeScale: {
+              value: 1.0,
+              min: 0.0,
+              max: 4.0,
+              step: 0.05,
+            },
             temporalBlend: {
               value: 0.85,
               min: 0.0,
@@ -304,6 +304,30 @@ export const BlackHole = () => {
           max: 0.5,
           step: 0.01,
         },
+        starCenterX: {
+          value: 0.35,
+          min: 0.0,
+          max: 1.0,
+          step: 0.01,
+        },
+        starCenterY: {
+          value: 0.6,
+          min: 0.0,
+          max: 1.0,
+          step: 0.01,
+        },
+        starHoleRadius: {
+          value: 0.25,
+          min: 0.05,
+          max: 0.6,
+          step: 0.01,
+        },
+        starHoleSoftness: {
+          value: 0.08,
+          min: 0.01,
+          max: 0.3,
+          step: 0.01,
+        },
       },
       {
         collapsed: true,
@@ -378,7 +402,7 @@ export const BlackHole = () => {
       uDiscWidth: { value: 5.3 },
       uFar: { value: 15.0 },
       uEyeDepth: { value: 6.0 },
-      uViewOffset: { value: new Vector2(-0.35, 0.35) },
+      uViewOffset: { value: new Vector2(0.35, -0.35) },
       uTemporalBlend: { value: 0.85 },
       uTemporalJitter: { value: 1.0 },
       iChannel0: { value: noiseTexture },
@@ -437,6 +461,10 @@ export const BlackHole = () => {
       uStarFormuparam: { value: 0.57 },
       uStarTile: { value: 1.0 },
       uStarStepsize: { value: 0.2 },
+      uStarCenter: { value: new Vector2(0.35, 0.6) },
+      uViewOffset: { value: new Vector2(-0.3, 0.3) },
+      uStarHoleRadius: { value: 0.25 },
+      uStarHoleSoftness: { value: 0.08 },
     }),
     [noiseTexture, sharedUniforms]
   );
@@ -478,6 +506,16 @@ export const BlackHole = () => {
     finalUniforms.uStarFormuparam.value = controls.starFormuparam;
     finalUniforms.uStarTile.value = controls.starTile;
     finalUniforms.uStarStepsize.value = controls.starStepsize;
+    finalUniforms.uStarCenter.value.set(
+      controls.starCenterX,
+      controls.starCenterY
+    );
+    finalUniforms.uViewOffset.value.set(
+      controls.viewOffsetX,
+      controls.viewOffsetY
+    );
+    finalUniforms.uStarHoleRadius.value = controls.starHoleRadius;
+    finalUniforms.uStarHoleSoftness.value = controls.starHoleSoftness;
   }, [
     controls.alphaSoftness,
     controls.alphaThreshold,
@@ -493,14 +531,20 @@ export const BlackHole = () => {
     controls.starDarkmatter,
     controls.starDistfading,
     controls.starFormuparam,
+    controls.starHoleRadius,
+    controls.starHoleSoftness,
     controls.starSaturation,
     controls.starSpeed,
     controls.starStepsize,
     controls.starTile,
     controls.starZoom,
+    controls.starCenterX,
+    controls.starCenterY,
     controls.toneMapPowerB,
     controls.toneMapPowerG,
     controls.toneMapPowerR,
+    controls.viewOffsetX,
+    controls.viewOffsetY,
     finalUniforms,
   ]);
 

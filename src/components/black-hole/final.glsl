@@ -23,6 +23,10 @@ uniform float uStarSaturation;
 uniform float uStarFormuparam;
 uniform float uStarTile;
 uniform float uStarStepsize;
+uniform vec2 uViewOffset;
+uniform vec2 uStarCenter;
+uniform float uStarHoleRadius;
+uniform float uStarHoleSoftness;
 
 vec3 saturate(vec3 x)
 {
@@ -173,18 +177,13 @@ vec3 applyStarSystem(vec2 fragCoord)
   }
 
   uv = fragCoord.xy / iResolution.xy;
-  vec2 uvForCenter = uv - 0.5;
+  vec2 center = uStarCenter;
+  vec2 uvForCenter = uv - center;
   uvForCenter.x *= iResolution.x / iResolution.y;
 
   float d = length(uvForCenter);
-  float r = 0.65;
-  float c = smoothstep(r, r - 0.325, d);
-
-  vec3 src = vec3(1.0);
-  vec3 dst = vec3(0.0);
-  vec3 circle = mix(src, dst, c);
-
-  v *= circle;
+  float holeMask = smoothstep(uStarHoleRadius, uStarHoleRadius + uStarHoleSoftness, d);
+  v *= holeMask;
 
   return mix(vec3(length(v)), v, uStarSaturation) * 0.01;
 }
@@ -216,9 +215,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
   color *= uColorGain;
   color = pow(color, vec3(uFinalGamma));
 
+  vec3 baseColor = color;
   color += applyStarSystem(fragCoord);
 
-  float intensity = max(color.r, max(color.g, color.b));
+  float intensity = max(baseColor.r, max(baseColor.g, baseColor.b));
   float alpha = smoothstep(uAlphaThreshold, uAlphaThreshold + uAlphaSoftness, intensity);
   fragColor = vec4(color, alpha);
 }
