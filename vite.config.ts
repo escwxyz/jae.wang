@@ -5,6 +5,7 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import typegpuPlugin from "unplugin-typegpu/vite";
 import { defineConfig } from "vite";
+// import glsl from "vite-plugin-glsl";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 
 const config = defineConfig({
@@ -22,6 +23,7 @@ const config = defineConfig({
     viteReact(),
     // contentCollections()
     typegpuPlugin({}),
+    // glsl(),
   ],
   ssr: {
     noExternal: ["@convex-dev/better-auth"],
