@@ -1,5 +1,5 @@
 import { createPortal } from "@react-three/fiber";
-import type { RefObject } from "react";
+import { memo, type RefObject } from "react";
 import {
   GLSL3,
   type IUniform,
@@ -15,28 +15,25 @@ interface PassProps {
   uniforms: Record<string, IUniform>;
 }
 
-export function FullscreenPass({
-  cameraRef,
-  fragmentShader,
-  scene,
-  uniforms,
-}: PassProps) {
-  return createPortal(
-    <>
-      <orthographicCamera args={[-1, 1, 1, -1, 0, 1]} ref={cameraRef} />
-      <mesh frustumCulled={false}>
-        <planeGeometry args={[2, 2]} />
-        <rawShaderMaterial
-          depthTest={false}
-          depthWrite={false}
-          fragmentShader={fragmentShader}
-          glslVersion={GLSL3}
-          toneMapped={false}
-          uniforms={uniforms}
-          vertexShader={vertexShader}
-        />
-      </mesh>
-    </>,
-    scene
-  );
-}
+export const FullscreenPass = memo(
+  ({ cameraRef, fragmentShader, scene, uniforms }: PassProps) => {
+    return createPortal(
+      <>
+        <orthographicCamera args={[-1, 1, 1, -1, 0, 1]} ref={cameraRef} />
+        <mesh frustumCulled={false}>
+          <planeGeometry args={[2, 2]} />
+          <rawShaderMaterial
+            depthTest={false}
+            depthWrite={false}
+            fragmentShader={fragmentShader}
+            glslVersion={GLSL3}
+            toneMapped={false}
+            uniforms={uniforms}
+            vertexShader={vertexShader}
+          />
+        </mesh>
+      </>,
+      scene
+    );
+  }
+);

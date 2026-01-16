@@ -49,6 +49,9 @@ function createNoiseTexture(size: number) {
 
 export const BlackHole = () => {
   const { gl, size } = useThree();
+
+  const isMobile = size.width < 640;
+
   const controls = useControls({
     "Black Hole": folder(
       {
@@ -64,7 +67,7 @@ export const BlackHole = () => {
               step: 0.5,
             },
             eyeDepth: {
-              value: 4.5,
+              value: isMobile ? 2.5 : 4.5,
               min: 2.0,
               max: 9.0,
               step: 0.25,
@@ -308,19 +311,19 @@ export const BlackHole = () => {
           step: 0.01,
         },
         starCenterX: {
-          value: 0.35,
+          value: isMobile ? 0.49 : 0.35,
           min: 0.0,
           max: 1.0,
           step: 0.01,
         },
         starCenterY: {
-          value: 0.6,
+          value: isMobile ? 0.7 : 0.6,
           min: 0.0,
           max: 1.0,
           step: 0.01,
         },
         starHoleRadius: {
-          value: 0.25,
+          value: isMobile ? 0.1 : 0.25,
           min: 0.05,
           max: 0.6,
           step: 0.01,
