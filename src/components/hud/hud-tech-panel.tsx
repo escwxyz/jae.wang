@@ -80,10 +80,30 @@ export const HudTechPanel = ({
         data-slot="tech-panel-body"
         id={contentId}
       >
-        <div className="absolute top-0 right-0 size-2 bg-white/10" />
-        <div className="absolute bottom-0 left-0 size-2 bg-white/10" />
-        <div className="absolute top-0 left-0 size-3 border-white/50 border-t border-l" />
-        <div className="absolute right-0 bottom-0 size-3 border-white/50 border-r border-b" />
+        <div
+          className={cn(
+            "absolute top-0 size-2 bg-white/10",
+            align === "right" ? "left-0" : "right-0"
+          )}
+        />
+        <div
+          className={cn(
+            "absolute bottom-0 size-2 bg-white/10",
+            align === "right" ? "right-0" : "left-0"
+          )}
+        />
+        <div
+          className={cn(
+            "absolute top-0 size-3 border-white/50 border-t",
+            align === "right" ? "right-0 border-r" : "left-0 border-l"
+          )}
+        />
+        <div
+          className={cn(
+            "absolute bottom-0 size-3 border-white/50 border-b",
+            align === "right" ? "left-0 border-l" : "right-0 border-r"
+          )}
+        />
         {children}
       </div>
     </div>
