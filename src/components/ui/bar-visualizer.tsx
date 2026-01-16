@@ -475,7 +475,7 @@ const BarVisualizerComponent = React.forwardRef<
         className={cn(
           "relative flex justify-center gap-1.5",
           centerAlign ? "items-center" : "items-end",
-          "h-32 w-full overflow-hidden rounded-lg bg-muted p-4",
+          "h-32 w-full overflow-hidden rounded-none bg-muted p-4",
           className
         )}
         data-state={state}
@@ -515,7 +515,7 @@ const Bar = React.memo<{
   <div
     className={cn(
       "min-w-2 max-w-3 flex-1 transition-all duration-150",
-      "rounded-full",
+      "rounded-none",
       "bg-border data-[highlighted=true]:bg-primary",
       state === "speaking" && "bg-primary",
       state === "thinking" && isHighlighted && "animate-pulse"

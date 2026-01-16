@@ -1,6 +1,7 @@
 import { useStore } from "@tanstack/react-store";
 import type { ReactNode } from "react";
 import { useId } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { appStore } from "@/stores/app-store";
 
@@ -25,6 +26,7 @@ export const HudTechPanel = ({
   const contentId = `${panelId}-content`;
   const activeId = useStore(appStore, (state) => state.activeTechPanelId);
   const isActive = activeId === panelId;
+  const isMobile = useIsMobile();
 
   return (
     <div
@@ -58,54 +60,58 @@ export const HudTechPanel = ({
         >
           {title}
         </button>
-        <div className="relative hidden h-px flex-1 bg-white/20 md:block">
+        {!isMobile && (
+          <div className="relative h-px flex-1 bg-white/20">
+            <div
+              className={cn(
+                "absolute top-0 h-0.75 w-1/3 bg-white/40",
+                align === "right" ? "right-0" : "left-0"
+              )}
+            />
+          </div>
+        )}
+      </div>
+
+      {(!isMobile || isActive) && (
+        <div
+          className={cn(
+            "relative overflow-hidden border border-white/10 bg-[#050505]/10 backdrop-blur-xs",
+            "fixed top-[35%] left-1/2 z-50 w-[min(90vw,20rem)] -translate-x-1/2 -translate-y-1/2",
+            "pointer-events-none translate-y-6 opacity-0 transition-all duration-300 ease-out",
+            "md:pointer-events-auto md:relative md:top-auto md:left-auto md:z-auto md:w-auto md:translate-x-0 md:translate-y-0 md:opacity-100",
+            isActive && "pointer-events-auto translate-y-0 opacity-100",
+            noPadding ? "p-0" : "p-4"
+          )}
+          data-slot="tech-panel-body"
+          id={contentId}
+        >
           <div
             className={cn(
-              "absolute top-0 h-0.75 w-1/3 bg-white/40",
+              "absolute top-0 size-2 bg-white/10",
+              align === "right" ? "left-0" : "right-0"
+            )}
+          />
+          <div
+            className={cn(
+              "absolute bottom-0 size-2 bg-white/10",
               align === "right" ? "right-0" : "left-0"
             )}
           />
+          <div
+            className={cn(
+              "absolute top-0 size-3 border-white/50 border-t",
+              align === "right" ? "right-0 border-r" : "left-0 border-l"
+            )}
+          />
+          <div
+            className={cn(
+              "absolute bottom-0 size-3 border-white/50 border-b",
+              align === "right" ? "left-0 border-l" : "right-0 border-r"
+            )}
+          />
+          {children}
         </div>
-      </div>
-
-      <div
-        className={cn(
-          "relative overflow-hidden border border-white/10 bg-[#050505]/10 backdrop-blur-xs",
-          "fixed top-[35%] left-1/2 z-50 w-[min(90vw,20rem)] -translate-x-1/2 -translate-y-1/2",
-          "pointer-events-none translate-y-6 opacity-0 transition-all duration-300 ease-out",
-          "md:pointer-events-auto md:relative md:top-auto md:left-auto md:z-auto md:w-auto md:translate-x-0 md:translate-y-0 md:opacity-100",
-          isActive && "pointer-events-auto translate-y-0 opacity-100",
-          noPadding ? "p-0" : "p-4"
-        )}
-        data-slot="tech-panel-body"
-        id={contentId}
-      >
-        <div
-          className={cn(
-            "absolute top-0 size-2 bg-white/10",
-            align === "right" ? "left-0" : "right-0"
-          )}
-        />
-        <div
-          className={cn(
-            "absolute bottom-0 size-2 bg-white/10",
-            align === "right" ? "right-0" : "left-0"
-          )}
-        />
-        <div
-          className={cn(
-            "absolute top-0 size-3 border-white/50 border-t",
-            align === "right" ? "right-0 border-r" : "left-0 border-l"
-          )}
-        />
-        <div
-          className={cn(
-            "absolute bottom-0 size-3 border-white/50 border-b",
-            align === "right" ? "left-0 border-l" : "right-0 border-r"
-          )}
-        />
-        {children}
-      </div>
+      )}
     </div>
   );
 };
